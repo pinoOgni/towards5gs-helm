@@ -1,0 +1,95 @@
+#
+# Software Name : towards5gs-helm
+# SPDX-FileCopyrightText: Copyright (c) 2021 Orange
+# SPDX-License-Identifier: Apache-2.0
+#
+# This software is distributed under the Apache License 2.0,
+# the text of which is available at todo
+# or see the "LICENSE" file for more details.
+#
+# Author: Abderaouf KHICHANE, Ilhem FAJJARI, Ayoub BOUSSELMI
+# Software description: An open-source project providing Helm charts to deploy 5G components (Core + RAN) on top of Kubernetes
+#
+# Default values for gnb-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  multiCluster: false
+  #Global network parametes
+  n2network:
+    name: n2network
+    masterIf: eth0
+    subnetIP: 10.100.50.248
+    cidr: 29
+    gatewayIP: 10.100.50.254
+    excludeIP: 10.100.50.254
+  n3network:
+    name: n3network
+    masterIf: eth0
+    subnetIP: 10.100.50.232
+    cidr: 29
+    gatewayIP: 10.100.50.238
+    excludeIP: 10.100.50.238
+
+
+projectName: gnb
+
+gnb:
+  enabled: true
+  name: gnb
+  replicaCount: 1
+  image:
+    name: towards5gs/ueransim-gnb
+    pullPolicy: IfNotPresent
+  configmap:
+    name: gnb-configmap
+  volume:
+    name: gnb-volume
+    mount: /ueransim/config
+  service:
+    name: gnb-service
+    type: ClusterIP
+    port: 4997
+    protocol: UDP
+
+  n2if:  # NGAP
+    ipAddress: 10.100.50.250
+  n3if:  # GTP-U
+    ipAddress: 10.100.50.236
+
+  amf:
+    n2if:  # NGAP
+      ipAddress: 10.100.50.249
+      port: 38412
+    service:
+      ngap:
+        enabled: false  # if true set gnb.amf.n2if.ipAddress to the name of AMF NGAP service or the IP of the cluster hosting the AMF
+
+  podAnnotations: {}
+    # additional annotations
+  imagePullSecrets: []
+  podSecurityContext: {}
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  
+  configuration: |-
+    mcc: '208' # Mobile Country Code value
+    mnc: '93'  # Mobile Network Code value (2 or 3 digits)
+    nci: '0x000000010'  # NR Cell Identity (36-bit)
+    idLength: 32        # NR gNB ID length in bits [22...32]
+    tac: 1     # Tracking Area Code
+    # List of supported S-NSSAIs by this gNB
+    slices:
+      - sst: 0x1
+        sd: 0x010203
+    # Indicates whether or not SCTP stream number errors should be ignored.
+    ignoreStreamIds: true
