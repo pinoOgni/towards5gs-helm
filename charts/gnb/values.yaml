@@ -37,6 +37,7 @@ projectName: gnb
 
 gnb:
   enabled: true
+  createService: true # (pinoOgni)
   name: gnb
   replicaCount: 1
   image:

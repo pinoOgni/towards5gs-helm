@@ -9,8 +9,10 @@
 #
 # Author: Abderaouf KHICHANE, Ilhem FAJJARI, Ayoub BOUSSELMI
 # Software description: An open-source project providing Helm charts to deploy 5G components (Core + RAN) on top of Kubernetes
-#
-{{- if and .Values.gnb.enabled }}
+#  
+# This is a modified version only for the gnb of the UERANSIM (pinoOgni)
+
+{{- if and .Values.gnb.createService }} # pinoOgni  createService (used as a variable in the related script)
 apiVersion: v1
 kind: Service
 metadata:
