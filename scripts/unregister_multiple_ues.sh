@@ -32,7 +32,4 @@ do
     clusterIP=$(kubectl get svc webui-service -n 5g --template '{{.spec.clusterIP}}')
     curl http://$clusterIP:5000/api/registered-ue-context -H "Token: admin" > /dev/null
     curl -X DELETE http://$clusterIP:5000/api/subscriber/$IMSI/20893 -H "Token: admin" -d '{"plmnID":"20893","ueId":"$IMSI","AuthenticationSubscription":{"authenticationMethod":"","permanentKey":null,"sequenceNumber":""},"AccessAndMobilitySubscriptionData":{},"SessionManagementSubscriptionData":null,"SmfSelectionSubscriptionData":{},"AmPolicyData":{},"SmPolicyData":{"smPolicySnssaiData":null},"FlowRules":null}' > /dev/null
-
-    echo "Deleting UE$i..."
-    helm delete -n 5g ue$i
 done < <(echo "$UES" | tr " " "\n")
