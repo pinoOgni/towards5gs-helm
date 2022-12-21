@@ -46,6 +46,7 @@ fi
 # Note: if there is only 1 GNB it will be always called gnb1 and if we want to create another 2, 
 # we need to create the other GNBs but without the service and also we need to pay attention to the MAX number
 
+NGNBS=$(expr $NGNBS + 0) # just to not have an error inside the if
 echo "Now $N GNBs will be installed..."
 for i in $(seq $N); do 
   # third control

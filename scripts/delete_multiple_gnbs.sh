@@ -11,9 +11,7 @@ NGNBS=$(kubectl get po -n 5g | grep "gnb-" | cut -d " " -f 1 | wc -l) # get the 
 if [ $# -ne 0 ]
 then # delete N GNBs
   GNBS=$(kubectl get po -n 5g | grep "gnb-" | grep -v "gnb1-" | cut -d " " -f 1 | head -$1) # remove gnb1 from the list of GNBs to be deleted
-fi
-
-if [ $1 -gt $NGNBS ]
+elif [ $# -ne 0 ] && [ $1 -gt $NGNBS ]
 then # error
   echo "You cannot delete more GNBs than are running!"
   exit 0

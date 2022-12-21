@@ -10,7 +10,7 @@ NUES=$(kubectl get po -n 5g | grep "ue-" | cut -d " " -f 1 | wc -l) # get the nu
 if [ $# -ne 0 ]
 then # delete N UEs
   UES=$(kubectl get po -n 5g | grep "ue-" | grep -v "ue1-" | cut -d " " -f 1 | sort -V | tail -$1) # remove ue1 from the list of UEs to be deleted
-elif [ $# -eq 0 ] && [ $1 -gt $NUES ]
+elif [ $# -ne 0 ] && [ $1 -gt $NUES ]
 then # error
   echo "You cannot delete more UEs than are running!"
   exit 0
