@@ -23,7 +23,7 @@ NUES=$(kubectl get po -n 5g | grep "ue-" | cut -d " " -f 1 | sort -V | cut -d "-
 
 echo "Now $N UEs will be registered and installed..."
 
-
+NUES=$(expr $NUES + 0) # just to not have an error inside the if
 for i in $(seq $N); do
   if [ $NUES -ne 0 ]
   then
