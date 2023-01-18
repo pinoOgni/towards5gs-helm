@@ -99,11 +99,11 @@ upf:
   tolerations: []
   affinity: {}
   autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
   configuration:
     configuration:
       # debugLevel: panic|fatal|error|warn|info|debug|trace
@@ -168,11 +168,11 @@ upf1:
   tolerations: []
   affinity: {}
   autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
   configuration:
     configuration:
       # debugLevel: panic|fatal|error|warn|info|debug|trace
@@ -235,11 +235,11 @@ upf2:
   tolerations: []
   affinity: {}
   autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
   configuration:
     configuration:
       # debugLevel: panic|fatal|error|warn|info|debug|trace
@@ -304,11 +304,11 @@ upfb:
   tolerations: []
   affinity: {}
   autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
   configuration:
     configuration:
       # debugLevel: panic|fatal|error|warn|info|debug|trace
