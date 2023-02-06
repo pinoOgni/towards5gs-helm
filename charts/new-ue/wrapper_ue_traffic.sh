@@ -16,8 +16,7 @@ do
       echo "Interface uesimtun0 is available"
       while :
       do
-        ping -I uesimtun0 13.13.13.1 -c 40
-        sleep 30
+        ping -I uesimtun0 13.13.13.1 -c 100
       done 
       # break
     fi
