@@ -17,6 +17,8 @@ do
       while :
       do
         ping -I uesimtun0 13.13.13.1 -c 100
+        sleep 5 
+        # repeat again
       done 
       # break
     fi

@@ -75,9 +75,9 @@ for i in $(seq $N); do
   echo "Installing GNB$i..."
   if [ $i -eq 1 ] 
   then
-    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=polito-testbed-tmp-worker-1,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
+    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=polito-testbed-tmp-worker-2,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
   else
-    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,gnb.createService=false,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=polito-testbed-tmp-worker-1,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
+    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,gnb.createService=false,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=polito-testbed-tmp-worker-2,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
   fi
   let X++
   let Y++
