@@ -54,7 +54,7 @@ for node in "gcp-master" "gcp-1" "gcp-2"; do
 	ssh $node /bin/bash << EOF 
         sudo apt install -y linux-image-unsigned-5.8.0-1039-gcp
         # TODO (pinoOgni) this works fine but when the machine is rebooted another kernel version is used again
-        sudo sed -i 's/GRUB_DEFAULT.*/GRUB_DEFAULT="Advanced options for Ubuntu 20.04.5 LTS (20.04) (on \/dev\/sda1)>Ubuntu, with Linux 5.4.0-1098-gcp (on \/dev\/sda1)"/g' /etc/default/grub.d/50-cloudimg-settings.cfg
+        sudo sed -i 's/GRUB_DEFAULT.*/GRUB_DEFAULT="Advanced options for Ubuntu 20.04.5 LTS (20.04) (on \/dev\/sda1)>Ubuntu, with Linux 5.8.0-1039-gcp (on \/dev\/sda1)"/g' /etc/default/grub.d/50-cloudimg-settings.cfg
         sudo update-grub2
         sudo reboot
 EOF
@@ -212,7 +212,7 @@ ssh gcp-master /bin/bash << EOF
     sed -i 's/192.168.0.0/172.22.0.0/g' custom-resources.yaml
     # the IPIP mode is used only for gcp cluster
     sed -i 's/encapsulation: VXLANCrossSubnet/encapsulation: IPIP/g' custom-resources.yaml  
-    kubectl delete -f custom-resources.yaml
+    kubectl apply -f custom-resources.yaml
     echo "Waiting Calico pods to be running..."
     kubectl wait pods --all -n calico-system --for condition=Ready
     echo "Multus installation..."
