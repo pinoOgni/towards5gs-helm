@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ "$#" -lt 1 ]; then
   echo "The correct way to use this script is the following:
-  ./create_free5gc.sh <shostname-node>
+  ./create_free5gc.sh <hostname-node>
 
   Example:
   ./create_free5gc.sh worker-1 

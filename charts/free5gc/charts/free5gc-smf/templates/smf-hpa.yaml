@@ -10,31 +10,37 @@
 # Author: Abderaouf KHICHANE, Ilhem FAJJARI, Ayoub BOUSSELMI
 # Software description: An open-source project providing Helm charts to deploy 5G components (Core + RAN) on top of Kubernetes
 #
-{{- if .Values.smf.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+{{- with .Values.smf }}
+{{- if .autoscaling.enabled }}
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "free5gc-smf.fullname" . }}-smf-hpa
+  name: {{ include "free5gc-smf.fullname" $ }}-{{ .name }}-hpa
   labels:
-    {{- include "free5gc-smf.labels" . | nindent 4 }}
+    {{- include "free5gc-smf.labels" $ | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "free5gc-smf.fullname" . }}-smf
-  minReplicas: {{ .Values.smf.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.smf.autoscaling.maxReplicas }}
+    name: {{ include "free5gc-smf.fullname" $ }}-{{ .name }}
+  minReplicas: {{ .autoscaling.minReplicas }}
+  maxReplicas: {{ .autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.smf.autoscaling.targetCPUUtilizationPercentage }}
+    {{- if .autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.smf.autoscaling.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
-    {{- if .Values.smf.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if .autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.smf.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
+{{- end }}
 {{- end }}

@@ -14,15 +14,23 @@
 # (if the GNB on N2 has only one IP it is the AMF that goes into error; if the GNB on N3 it has only one IP, the solution works only partially/random behaviour)
 
 MAX=4 # you can modify this value if you change the CIDR (/29) of values.yaml file
-N="2" # default number of GNBs to create
 X=0 # .250, .251, .252, .253 --> for n2if
 Y=4 # .234, .235, .236, .237 --> for n3if
 
-# get number of GNBs to be created
-if [ $# -ne 0 ]
-then
-  N=$1
+
+if [ "$#" -lt 2 ]; then
+  echo "The correct way to use this script is the following:
+  ./create_free5gc.sh <number-of-gnbs> <hostname-node>
+
+  Example:
+  ./create_free5gc.sh 2 worker-1 
+    
+  "
+  exit 1
 fi
+
+
+N=$1
 
 # first control
 if [ $N -gt $MAX ]
@@ -75,9 +83,9 @@ for i in $(seq $N); do
   echo "Installing GNB$i..."
   if [ $i -eq 1 ] 
   then
-    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=energy-b-testbed-worker-1,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
+    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=$2,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
   else
-    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,gnb.createService=false,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=energy-b-testbed-worker-1,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
+    helm -n 5g install gnb$i ../charts/gnb --set gnb.configmap.name=gnb-configmap$i,gnb.createService=false,global.n2network.masterIf=e0,global.n3network.masterIf=e0,gnb.nodeSelector."kubernetes\.io/hostname"=$2,gnb.n2if.ipAddress=10.100.50.25$X,gnb.n3if.ipAddress=10.100.50.23$Y
   fi
   let X++
   let Y++

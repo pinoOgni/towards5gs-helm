@@ -11,32 +11,38 @@
 # Software description: An open-source project providing Helm charts to deploy 5G components (Core + RAN) on top of Kubernetes
 #
 {{- if eq .Values.global.userPlaneArchitecture "single" }}
-{{- if .Values.upf.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+{{- with .Values.upf }}
+{{- if .autoscaling.enabled }}
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "free5gc-upf.fullname" . }}-upf-hpa
+  name: {{ include "free5gc-upf.fullname" $ }}-{{ .name }}-hpa
   labels:
-    {{- include "free5gc-upf.labels" . | nindent 4 }}
+    {{- include "free5gc-upf.labels" $ | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "free5gc-upf.fullname" . }}-upf
-  minReplicas: {{ .Values.upf.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.upf.autoscaling.maxReplicas }}
+    name: {{ include "free5gc-upf.fullname" $ }}-{{ .name }}
+  minReplicas: {{ .autoscaling.minReplicas }}
+  maxReplicas: {{ .autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.upf.autoscaling.targetCPUUtilizationPercentage }}
+    {{- if .autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.upf.autoscaling.targetCPUUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
-    {{- if .Values.upf.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if .autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.upf.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
