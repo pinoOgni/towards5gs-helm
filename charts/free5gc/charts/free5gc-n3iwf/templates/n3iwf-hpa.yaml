@@ -10,19 +10,18 @@
 # Author: Abderaouf KHICHANE, Ilhem FAJJARI, Ayoub BOUSSELMI
 # Software description: An open-source project providing Helm charts to deploy 5G components (Core + RAN) on top of Kubernetes
 #
-{{- with .Values.n3iwf }}
 {{- if .autoscaling.enabled }}
-apiVersion: autoscaling/v2
+apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "free5gc-n3iwf.fullname" $ }}-{{ .name }}-hpa
+  name: {{ include "free5gc-n3iwf.fullname" . }}-n3iwf-hpa
   labels:
-    {{- include "free5gc-n3iwf.labels" $ | nindent 4 }}
+    {{- include "free5gc-n3iwf.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "free5gc-n3iwf.fullname" $ }}-{{ .name }}
+    name: {{ include "free5gc-n3iwf.fullname" . }}-n3iwf
   minReplicas: {{ .autoscaling.minReplicas }}
   maxReplicas: {{ .autoscaling.maxReplicas }}
   metrics:
@@ -30,17 +29,12 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        target:
-          type: Utilization
-          averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
     {{- if .autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        target:
-          type: Utilization
-          averageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
+        targetAverageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
-{{- end }}
 {{- end }}

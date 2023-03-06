@@ -10,37 +10,31 @@
 # Author: Abderaouf KHICHANE, Ilhem FAJJARI, Ayoub BOUSSELMI
 # Software description: An open-source project providing Helm charts to deploy 5G components (Core + RAN) on top of Kubernetes
 #
-{{- with .Values.udm }}
-{{- if .autoscaling.enabled }}
-apiVersion: autoscaling/v2
+{{- if .Values.udm.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "free5gc-udm.fullname" $ }}-{{ .name }}-hpa
+  name: {{ include "free5gc-udm.fullname" . }}-udm-hpa
   labels:
-    {{- include "free5gc-udm.labels" $ | nindent 4 }}
+    {{- include "free5gc-udm.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "free5gc-udm.fullname" $ }}-{{ .name }}
-  minReplicas: {{ .autoscaling.minReplicas }}
-  maxReplicas: {{ .autoscaling.maxReplicas }}
+    name: {{ include "free5gc-udm.fullname" . }}-udm
+  minReplicas: {{ .Values.udm.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.udm.autoscaling.maxReplicas }}
   metrics:
-    {{- if .autoscaling.targetCPUUtilizationPercentage }}
+    {{- if .Values.udm.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        target:
-          type: Utilization
-          averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ .Values.udm.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
-    {{- if .autoscaling.targetMemoryUtilizationPercentage }}
+    {{- if .Values.udm.autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        target:
-          type: Utilization
-          averageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
+        targetAverageUtilization: {{ .Values.udm.autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
-{{- end }}
 {{- end }}

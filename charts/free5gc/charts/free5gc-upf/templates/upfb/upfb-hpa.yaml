@@ -13,17 +13,17 @@
 {{- if eq .Values.global.userPlaneArchitecture "ulcl" }}
 {{- with .Values.upfb }}
 {{- if .autoscaling.enabled }}
-apiVersion: autoscaling/v2
+apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "free5gc-upf.fullname" $ }}-{{ .name }}-hpa
+  name: {{ include "free5gc-upf.fullname" . }}-{{ .name }}-hpa
   labels:
-    {{- include "free5gc-upf.labels" $ | nindent 4 }}
+    {{- include "free5gc-upf.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "free5gc-upf.fullname" $ }}-{{ .name }}
+    name: {{ include "free5gc-upf.fullname" . }}-{{ .name }}
   minReplicas: {{ .autoscaling.minReplicas }}
   maxReplicas: {{ .autoscaling.maxReplicas }}
   metrics:
@@ -31,17 +31,13 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        target:
-          type: Utilization
-          averageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ .autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
     {{- if .autoscaling.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
-        target:
-          type: Utilization
-          averageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
+        targetAverageUtilization: {{ .autoscaling.targetMemoryUtilizationPercentage }}
     {{- end }}
 {{- end }}
 {{- end }}
